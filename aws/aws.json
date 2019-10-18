@@ -1,0 +1,50 @@
+{
+    "variables": {
+        "aws_access_key": "",
+        "aws_secret_key": "",
+        "vpc_region": "",
+        "source_ami_name": "",
+        "source_ami_owner_id": "",
+        "instance_type": "",
+        "ssh_username": ""
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "region": "{{user `vpc_region`}}",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "{{user `source_ami_name`}}",
+                    "root-device-type": "ebs"
+                },
+                "owners": [
+                    "{{user `source_ami_owner_id`}}"
+                ],
+                "most_recent": true
+            },
+            "instance_type": "{{ user `instance_type`}}",
+            "ssh_username": "{{ user `ssh_username`}}",
+            "ami_name": "claw-dfir-sift {{isotime | clean_ami_name}}"
+        }
+    ],
+    "provisioners": [
+        {
+          "type": "shell",
+          "script": "../provisioners/sift.sh"
+        },
+        {
+            "type": "shell",
+            "script": "../provisioners/s3.sh"
+          }
+    ],
+    "post-processors": [
+        {
+            "type": "manifest",
+            "output": "manifest.json",
+            "strip_path": true
+        }
+    ]
+}

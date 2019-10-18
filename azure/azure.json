@@ -1,0 +1,47 @@
+{
+    "variables": {
+        "azure_subscription_id": "",
+        "azure_client_id": "",
+        "azure_client_secret": "",
+        "azure_tenant_id": "",
+        "azure_resource_group_name": ""
+    },
+    "builders": [
+        {
+            "type": "azure-arm",
+            "subscription_id": "{{user `azure_subscription_id`}}",
+            "client_id": "{{user `azure_client_id`}}",
+            "client_secret": "{{user `azure_client_secret`}}",
+            "tenant_id": "{{user `azure_tenant_id`}}",
+            "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
+            "managed_image_name": "claw-dfir-sift-{{isotime \"2006-01-02-24\"}}",
+            "os_type": "Linux",
+            "image_publisher": "Canonical",
+            "image_offer": "UbuntuServer",
+            "image_sku": "16.04-LTS",
+            "azure_tags": {
+                "dept": "SecOps",
+                "task": "DFIR"
+            },
+            "location": "East US",
+            "vm_size": "Standard_DS2_v2"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "../provisioners/desktop.sh"
+        },
+        {
+            "type": "shell",
+            "script": "../provisioners/sift.sh"
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "manifest",
+            "output": "manifest.json",
+            "strip_path": true
+        }
+    ]
+}
