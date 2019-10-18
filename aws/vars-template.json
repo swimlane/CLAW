@@ -1,0 +1,9 @@
+{
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "vpc_region": "us-east-1",
+    "source_ami_name": "Ubuntu Desktop 16.04LTS-180627-180802 (HVM EBS x86_64)-*",
+    "source_ami_owner_id": "679593333241",
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu"
+}
